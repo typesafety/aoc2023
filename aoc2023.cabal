@@ -1,0 +1,47 @@
+cabal-version:      3.0
+name:               aoc2023
+version:            0.1.0.0
+synopsis:           Advent of Code 2023 solutions
+
+-- A longer description of the package.
+-- description:
+homepage:           github.com/typesafety
+
+-- A URL where users can report bugs.
+-- bug-reports:
+license:            MIT
+license-file:       LICENSE
+author:             Thomas Li
+maintainer:         ailoodee@gmail.com
+
+-- A copyright notice.
+-- copyright:
+-- category:
+extra-source-files: CHANGELOG.md
+
+library
+    exposed-modules:  MyLib
+
+    -- Modules included in this library but not exported.
+    -- other-modules:
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+    build-depends:    base ^>=4.17.2.0
+    hs-source-dirs:   src
+    default-language: GHC2021
+
+executable aoc2023
+    main-is:          Main.hs
+
+    -- Modules included in this executable, other than Main.
+    -- other-modules:
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+    build-depends:
+        base ^>=4.17.2.0,
+        aoc2023
+
+    hs-source-dirs:   app
+    default-language: GHC2021
