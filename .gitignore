@@ -1,1 +1,6 @@
+# Cabal build files.
 dist-newstyle/
+
+# Do not track puzzle inputs.
+inputs/*
+!inputs/README.md

@@ -1,0 +1,18 @@
+:set -XImportQualifiedPost
+
+-- Only needed to define the :def statements in here.
+import Prelude ((++), ($), return)
+
+import Text.Megaparsec qualified as P
+import Text.Megaparsec.Char qualified as P
+import Text.Megaparsec.Char.Lexer qualified as Lex
+
+:set prompt "aoc> "
+:set -ferror-spans -freverse-errors -fprint-expanded-synonyms
+:set -fprint-explicit-foralls
+
+:def hoogle \s -> return $ ":! hoogle --count=15 \"" ++ s ++ "\""
+
+:def pretty \_ -> return (":set -interactive-print=Text.Pretty.Simple.pPrint")
+:def no-pretty \_ -> return (":set -interactive-print System.IO.print")
+:set -interactive-print=Text.Pretty.Simple.pPrint
