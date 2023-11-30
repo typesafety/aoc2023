@@ -1,0 +1,40 @@
+{
+    "editor.fontSize": 16,
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "editor.smoothScrolling": true,
+    "editor.mouseWheelScrollSensitivity": 2,
+    "extensions.ignoreRecommendations": false,
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.minimap.maxColumn": 80,
+    "editor.tabCompletion": "off",
+    "editor.quickSuggestionsDelay": 10,
+    "workbench.startupEditor": "newUntitledFile",
+    "html.autoClosingTags": false,
+    "editor.dragAndDrop": false,
+    "editor.emptySelectionClipboard": false,
+    "editor.fontFamily": "Hack, Consolas, monospace, 'Courier New'",
+    "workbench.commandPalette.history": 100,
+    "editor.renderWhitespace": "trailing",
+    "editor.largeFileOptimizations": false,
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "editor.indentSize": "tabSize",
+
+    "editor.tabSize": 4,
+
+    "[html]": {
+        "editor.tabSize": 2,
+    },
+    "[haskell]": {
+        "editor.tabSize": 4,
+    },
+    "workbench.colorTheme": "Eva Dark",
+    "terminal.integrated.fontSize": 18,
+    "haskell.manageHLS": "GHCup",
+    "vim.useSystemClipboard": false,
+}
