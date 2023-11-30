@@ -1,5 +1,5 @@
 {
-    "editor.fontSize": 16,
+    "editor.fontSize": 18,
     "editor.rulers": [
         80,
         120
@@ -8,14 +8,14 @@
     "editor.mouseWheelScrollSensitivity": 2,
     "extensions.ignoreRecommendations": false,
     "editor.acceptSuggestionOnEnter": "off",
-    "editor.minimap.maxColumn": 80,
+    "editor.minimap.enabled": false,
     "editor.tabCompletion": "off",
     "editor.quickSuggestionsDelay": 10,
     "workbench.startupEditor": "newUntitledFile",
     "html.autoClosingTags": false,
     "editor.dragAndDrop": false,
     "editor.emptySelectionClipboard": false,
-    "editor.fontFamily": "Hack, Consolas, monospace, 'Courier New'",
+    "editor.fontFamily": "IosevkaTermSlab Nerd Font Light, Hack, Consolas, monospace, 'Courier New'",
     "workbench.commandPalette.history": 100,
     "editor.renderWhitespace": "trailing",
     "editor.largeFileOptimizations": false,
