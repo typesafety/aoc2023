@@ -4,3 +4,6 @@ dist-newstyle/
 # Do not track puzzle inputs.
 inputs/*
 !inputs/README.md
+
+# Session ID
+.session
