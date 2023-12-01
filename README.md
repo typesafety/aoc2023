@@ -7,10 +7,15 @@ Solutions are located in
 
 Usage:
 ```
-aoc2023 --day={1-25} --part={1,2}
+aoc2023 --day={1-25} --part={1,2} --inputs_dir=<PATH_TO_PUZZLE_INPUTS>
 ```
+
+* `--day`: `1`-`25`
+* `--part`: `1` or `2`
+* `--inputs_dir`: Path to a directory containing puzzle inputs.  Puzzle inputs
+    should be named `<DAY>.txt` without any leading zeroes.
 
 Example:
 ```
-aoc2023 --day=4 --part=1
+aoc2023 --day=4 --part=1 --inputs_dir=./inputs
 ```
