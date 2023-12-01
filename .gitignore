@@ -5,5 +5,5 @@ dist-newstyle/
 inputs/*
 !inputs/README.md
 
-# Session ID
+# Session ID for using the puzzle input downloader script.
 .session

@@ -2,13 +2,11 @@ cabal-version:      3.0
 name:               aoc2023
 version:            0.1.0.0
 synopsis:           Advent of Code 2023 solutions
-homepage:           github.com/typesafety
+homepage:           https://github.com/typesafety
 license:            MIT
 license-file:       LICENSE
 author:             Thomas Li
 maintainer:         ailoodee@gmail.com
-
-extra-source-files: CHANGELOG.md
 
 common warnings
     ghc-options:
@@ -29,7 +27,7 @@ library
         MyPrelude
         Solutions.Day01
     build-depends:
-        base ^>= 4.17.2.0,
+        base ^>= 4.18.1.0,
         -- Standard data structures.
         containers,
         -- For the Hashable class and instances.
@@ -58,8 +56,11 @@ executable aoc2023
         warnings,
     main-is: Main.hs
     build-depends:
-        base ^>= 4.17.2.0,
+        base ^>= 4.18.1.0,
         aoc2023,
+
+        filepath,
+        optparse-applicative,
     hs-source-dirs:
         app
     default-language: GHC2021

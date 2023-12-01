@@ -27,7 +27,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         '--day',
         type=int,
-        choices=range(1, 25),
+        choices=range(1, 26),
         required=True
     )
     parser.add_argument(

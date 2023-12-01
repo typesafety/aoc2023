@@ -23,10 +23,10 @@ module MyPrelude (
     module Data.Sequence,
     module Data.Text,
     module Data.Void,
-    module Debug.Trace,
-    module System.IO.Unsafe,
-
     module Debug.Pretty.Simple,
+    module Debug.Trace,
+    module GHC.Generics,
+    module System.IO.Unsafe,
     module TextShow,
 ) where
 
@@ -78,8 +78,8 @@ import Data.List.NonEmpty hiding ((<|))
 import Data.Maybe (fromMaybe, isJust)
 import Data.Sequence (Seq(..), (<|), (|>))
 import Data.Text (Text)
-import Data.Text qualified as Txt
-import Data.Text.IO qualified as Txt
+import Data.Text qualified as Text
+import Data.Text.IO qualified as Text
 import Data.Void (Void)
 import Debug.Trace (
     trace,
@@ -90,6 +90,7 @@ import Debug.Trace (
     traceShowId,
     traceShowM,
  )
+import GHC.Generics
 import GHC.Stack (HasCallStack)
 import System.IO.Unsafe (unsafePerformIO)
 import Unsafe.Coerce (unsafeCoerce)
@@ -144,14 +145,15 @@ partialLast = \case
 
 -- * Working with Text
 
-putTxtLn :: Text -> IO ()
-putTxtLn = Txt.putStrLn
+putTextLn :: Text -> IO ()
+putTextLn = Text.putStrLn
 
-toTxt :: String -> Text
-toTxt = Txt.pack
+-- | Go from a showable type to 'Text' the really slow way, via 'String'.
+showt' :: Show a => a -> Text
+showt' = Text.pack . show
 
-toStr :: Text -> String
-toStr = Txt.unpack
+packt :: String -> Text
+packt = Text.pack
 
 -- * Bifunctor
 
