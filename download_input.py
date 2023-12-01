@@ -44,7 +44,7 @@ def download_puzzle_input(day: int, session_id_file_path: Path) -> str:
     with open(session_id_file_path) as f:
         session_id = f.read().strip()
     req = Request(
-        f'https://adventofcode.com/2022/day/{day}/input',
+        f'https://adventofcode.com/2023/day/{day}/input',
         headers={'Cookie': f'session={session_id}'},
     )
     with urlopen(req) as resp:
