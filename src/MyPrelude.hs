@@ -14,6 +14,7 @@ module MyPrelude (
     module Data.Char,
     module Data.Coerce,
     module Data.Functor,
+    module Data.Foldable,
     module Data.HashMap.Strict,
     module Data.HashSet,
     module Data.IntMap.Strict,
@@ -61,14 +62,15 @@ import Prelude as PreludeLess hiding (
     (!!),
  )
 
-import Control.Applicative ((<|>))
+import Control.Applicative ((<|>), empty)
 import Control.Monad ((>=>), (<=<), when, forM_, forM,void, replicateM_)
 import Control.Monad.Reader (Reader, ReaderT)
 import Control.Monad.State.Strict (State, StateT)
 import Data.Bifunctor
 import Data.Char (digitToInt)
 import Data.Coerce (coerce)
-import Data.Functor ((<&>))
+import Data.Foldable (foldl')
+import Data.Functor ((<&>), ($>), (<$))
 import Data.HashMap.Strict (HashMap)
 import Data.HashSet (HashSet)
 import Data.IntMap.Strict (IntMap)
@@ -105,6 +107,7 @@ import Debug.Pretty.Simple (
     pTraceShowM,
  )
 import Text.Megaparsec qualified as P
+import Text.Megaparsec.Char qualified as P
 import TextShow hiding (singleton)
 
 
@@ -119,9 +122,16 @@ showtSR (SR t) = showt t
 
 -- * Parsing and plumbing
 
--- TODO: output error message on parse fail
-partialParseText :: HasCallStack => P.Parsec Void Text b -> Text -> b
-partialParseText p = fromMaybe (error "partialParseText: failed parse") . P.parseMaybe p
+partialParse :: forall s b . (HasCallStack, P.Stream s, Show s) => P.Parsec Void s b -> s -> b
+partialParse parser input =
+    fromMaybe (error $ "partialParseText: failed to parse input: " <> show input)
+    $ P.parseMaybe @Void @s @b parser input
+
+partialParseString :: P.Parsec Void String Int -> String -> Int
+partialParseString = partialParse
+
+partialParseText :: P.Parsec Void Text Int -> Text -> Int
+partialParseText = partialParse
 
 partialNonEmpty :: HasCallStack => [a] -> NonEmpty a
 partialNonEmpty xs = case nonEmpty xs of
@@ -142,6 +152,12 @@ partialLast :: HasCallStack => [a] -> a
 partialLast = \case
     [] -> error "partialLast: empty list"
     xs -> List.last xs
+
+-- ** Extra combinators
+
+-- | Return True when the end of the line has been reached.  Consumes input.
+atEol :: (P.MonadParsec e s m, P.Token s ~ Char) => m Bool
+atEol = (P.eol $> True) <|> pure False
 
 -- * Working with Text
 
