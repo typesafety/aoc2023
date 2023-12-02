@@ -155,6 +155,9 @@ showt' = Text.pack . show
 packt :: String -> Text
 packt = Text.pack
 
+unpackt :: Text -> String
+unpackt = Text.unpack
+
 -- * Bifunctor
 
 both :: Bifunctor p => (a -> b) -> p a a -> p b b
@@ -169,6 +172,11 @@ applyN n f = List.foldl' (.) id (replicate n f)
 -- | n - 1
 decr :: Integral a => a -> a
 decr n = n - 1
+
+-- * Missing functor operators
+
+(<.>) :: Functor f => (b -> c) -> (a -> f b) -> a -> f c
+f <.> g = fmap f . g
 
 -- * Placeholders
 

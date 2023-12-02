@@ -14,7 +14,9 @@ main = do
 
     putTextLn $ "=== " <> showt' (args_day args) <> ", " <> showt' (args_part args) <> " ==="
 
-    inputText <- readPuzzleInput (args_day args) (args_inputsDir args)
+    inputText <- case args_inputFileOverride args of
+        Just fp -> readPuzzleInputOverride fp
+        Nothing -> readPuzzleInput (args_day args) (args_inputsDir args)
     let solver = pickSolver (args_day args) (args_part args)
 
     putTextLn $ solver inputText
@@ -25,6 +27,9 @@ readPuzzleInput :: Day -> FilePath -> IO Text
 readPuzzleInput day inputDir = do
     let inputFp = inputDir </> (show (dayToInt day) <> ".txt")
     packt <$> readFile inputFp
+
+readPuzzleInputOverride :: FilePath -> IO Text
+readPuzzleInputOverride = fmap packt . readFile
 
 -- * Solver selection
 
@@ -146,7 +151,8 @@ dayToInt = \case
 data Args = Args {
     args_day :: Day,
     args_part :: Part,
-    args_inputsDir :: FilePath
+    args_inputsDir :: FilePath,
+    args_inputFileOverride :: Maybe FilePath
 }
     deriving (Eq, Show)
 
@@ -167,7 +173,14 @@ argsParser = Args
     <$> dayParser
     <*> partParser
     <*> inputsDirParser
+    <*> inputFileOverrideParser
   where
+    -- For specifying a specific input file
+    inputFileOverrideParser :: Parser (Maybe FilePath)
+    inputFileOverrideParser = optional $ strOption
+        (long "input_file_override"
+            <> help "Specific input file to use. (TODO: make --inputs_directory _xor_ --input_file_override required)")
+
     inputsDirParser :: Parser FilePath
     inputsDirParser = strOption
         (long "inputs_directory"
