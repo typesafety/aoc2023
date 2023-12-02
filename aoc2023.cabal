@@ -26,6 +26,7 @@ library
     exposed-modules:
         MyPrelude
         Solutions.Day01
+        Solutions.Day02
     build-depends:
         base ^>= 4.18.1.0,
         -- Standard data structures.
@@ -63,4 +64,6 @@ executable aoc2023
         optparse-applicative,
     hs-source-dirs:
         app
+    other-modules:
+        GHCI
     default-language: GHC2021

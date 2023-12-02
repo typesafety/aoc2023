@@ -2,10 +2,27 @@ module Main where
 
 import MyPrelude
 
-import Options.Applicative
+import Options.Applicative (
+    (<**>),
+    Parser,
+    ParserInfo,
+    execParser,
+    fullDesc,
+    header,
+    help,
+    helper,
+    info,
+    long,
+    maybeReader,
+    option,
+    optional,
+    progDesc,
+    strOption,
+    )
 import System.FilePath ((</>))
 
 import Solutions.Day01 qualified as S01
+import Solutions.Day01 qualified as S02
 
 
 main :: IO ()
@@ -37,8 +54,8 @@ pickSolver :: Day -> Part -> (Text -> Text)
 pickSolver d p = case (d, p) of
     (D01, P1) -> S01.solve1
     (D01, P2) -> S01.solve2
-    -- (D02, P1) -> S02.solve1
-    -- (D02, P2) -> S02.solve2
+    (D02, P1) -> S02.solve1
+    (D02, P2) -> S02.solve2
     -- (D03, P1) -> S03.solve1
     -- (D03, P2) -> S03.solve2
     -- (D04, P1) -> S04.solve1
