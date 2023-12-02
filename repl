@@ -10,9 +10,15 @@
 spawn cabal repl
 
 # Wait for a successful load, then load the re-exporter module.
-expect "Ok,*modules loaded" {
-    send ":load app/GHCI.hs\n"
+expect {
+    "Ok,*loaded" {
+        # If the initial loading was successful, load the re-exporter.
+        send ":load app/GHCI.hs\n"
+    }
+    "Failed,*loaded" {
+        # Otherwise, do nothing.
+    }
 }
 
-# Pass control to the user.
+# Pass control back to the user.
 interact

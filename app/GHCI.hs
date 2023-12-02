@@ -2,4 +2,6 @@
 -- in GHCi with `:load app/GHCI.hs`
 module GHCI where
 
+import MyPrelude
+
 import Solutions.Day01 qualified as S01
