@@ -1,0 +1,18 @@
+#!/usr/bin/expect -f
+
+# Runs `cabal repl` and imports the `GHCI.hs` module, which re-exports solution
+# modules as qualified imports.
+#
+# The purpose of doing this is to be able to run a single command and
+# immediately have access to qualified imports of library modules.
+
+# Start GHCi through cabal.
+spawn cabal repl
+
+# Wait for a successful load, then load the re-exporter module.
+expect "Ok,*modules loaded" {
+    send ":load app/GHCI.hs\n"
+}
+
+# Pass control to the user.
+interact

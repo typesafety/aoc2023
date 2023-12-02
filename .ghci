@@ -1,7 +1,7 @@
 :set -XImportQualifiedPost
 
 -- Only needed to define the :def statements in here.
-import Prelude ((++), ($), return)
+import Prelude ((++), ($), pure)
 
 import Text.Megaparsec qualified as P
 import Text.Megaparsec.Char qualified as P
@@ -11,8 +11,19 @@ import Text.Megaparsec.Char.Lexer qualified as Lex
 :set -ferror-spans -freverse-errors -fprint-expanded-synonyms
 :set -fprint-explicit-foralls
 
-:def hoogle \s -> return $ ":! hoogle --count=15 \"" ++ s ++ "\""
+:def hoogle \s -> pure $ ":! hoogle --count=15 \"" ++ s ++ "\""
 
-:def pretty \_ -> return (":set -interactive-print=Text.Pretty.Simple.pPrint")
-:def no-pretty \_ -> return (":set -interactive-print System.IO.print")
+:def pretty \_ -> pure (":set -interactive-print=Text.Pretty.Simple.pPrint")
+:def no-pretty \_ -> pure (":set -interactive-print System.IO.print")
 :set -interactive-print=Text.Pretty.Simple.pPrint
+
+-- Turn off all warnings in the REPL, mainly to reduce noise at startup.
+:set -w
+
+-- Nonsense to get loading/reloading of the local aoc2023 library files to work.
+-- After launching GHCi, run `:la` to load `GHCI.hs` which in turn re-exports
+-- other modules.
+--
+-- Run the `repl` script to have this done automatically at startup (requires
+-- `expect` to be installed).
+:def la \_ -> pure ":load app/GHCI.hs"
