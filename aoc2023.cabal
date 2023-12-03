@@ -2,7 +2,7 @@ cabal-version:      3.0
 name:               aoc2023
 version:            0.1.0.0
 synopsis:           Advent of Code 2023 solutions
-homepage:           https://github.com/typesafety
+homepage:           https://github.com/typesafety/aoc2023
 license:            MIT
 license-file:       LICENSE
 author:             Thomas Li

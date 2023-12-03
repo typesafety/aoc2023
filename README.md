@@ -37,4 +37,4 @@ To launch a REPL with all solution modules loaded (imported qualified as
 aoc>
 ```
 
-Re-exports from `apps/GHCI.hs`, like `S01` will now exported.
+Re-exports from `app/GHCI.hs`, like `S01` will now exported.
