@@ -8,9 +8,16 @@ module Solutions.Day03 where
 import MyPrelude
 
 import Data.Maybe (mapMaybe)
+import Data.List qualified as List
 
 import Data.HashMap.Strict qualified as HM
-import Optics
+import Optics (
+    (%),
+    (^.),
+    over,
+    Field1(_1),
+    Field2(_2)
+    )
 import Text.Megaparsec qualified as P
 import Text.Megaparsec.Char qualified as P
 import Text.Megaparsec.Char.Lexer qualified as Lex
@@ -20,19 +27,23 @@ import Text.Megaparsec.Char.Lexer qualified as Lex
 solve1 :: Text -> Text
 solve1 = showt
     . foldl' (\acc partNumber -> partNumber ^. #number + acc) 0
-    . (\schem -> mapMaybe (getPartNumber (schem ^. #symbols)) (schem ^. #numbers))
+    . getPartNumbers
     . parseSchematic . partialParse inputP
 
 data PartNumber = PartNumber {
     number :: Int,
-    symbol :: Char
+    symbol :: Char,
+    symbolPoint :: Point  -- Location of the symbol that this part is attached to.
     }
     deriving (Eq, Show, Generic)
 
+getPartNumbers :: Schematic -> [PartNumber]
+getPartNumbers schem = mapMaybe (getPartNumber (schem ^. #symbols)) (schem ^. #numbers)
+
 getPartNumber :: HashMap Point Char -> Number -> Maybe PartNumber
 getPartNumber symbols number = do
-    (_, char) <- find (\(p, _) -> pointIsAdjacent p number) (HM.toList symbols)
-    pure (PartNumber (number ^. #value) char)
+    (point, char) <- find (\(p, _) -> pointIsAdjacent p number) (HM.toList symbols)
+    pure (PartNumber (number ^. #value) char point)
 
 pointIsAdjacent :: Point -> Number -> Bool
 pointIsAdjacent (px, py) number =
@@ -60,7 +71,6 @@ data Number = Number {
 data Schematic = Schematic {
     symbols :: HashMap Point Char,
     numbers :: [Number]
-    -- numbers :: [((Point, Point), Int)]
     }
     deriving (Eq, Show, Generic)
 
@@ -107,4 +117,18 @@ inputP = P.someTill (P.someTill P.anySingle P.eol) P.eof
 -- * Part 2
 
 solve2 :: Text -> Text
-solve2 = todo
+solve2 = showt
+    . HM.foldl' (\acc numbers -> acc + product numbers) 0
+    . gears
+    . getPartNumbers
+    . parseSchematic . partialParse inputP
+
+gears :: [PartNumber] -> HashMap (Point, Char) [Int]
+gears =
+    HM.filter ((== 2) . List.length)
+    . go HM.empty
+    . List.filter (\pn -> pn ^. #symbol == '*')
+  where
+    go :: HashMap (Point, Char) [Int] -> [PartNumber] -> HashMap (Point, Char) [Int]
+    go hm [] = hm
+    go hm (p : pn) = go (HM.insertWith (<>) (p ^. #symbolPoint, p ^. #symbol) [p ^. #number] hm) pn
