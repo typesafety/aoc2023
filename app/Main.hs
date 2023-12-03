@@ -22,7 +22,7 @@ import Options.Applicative (
 import System.FilePath ((</>))
 
 import Solutions.Day01 qualified as S01
-import Solutions.Day01 qualified as S02
+import Solutions.Day02 qualified as S02
 
 
 main :: IO ()

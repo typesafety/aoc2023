@@ -60,6 +60,10 @@ import Prelude as PreludeLess hiding (
     zip,
     zipWith,
     (!!),
+
+    -- Hide `id` since it's a useful variable name (redefined as `identity` in
+    -- this module).
+    id,
  )
 
 import Control.Applicative ((<|>), empty)
@@ -110,15 +114,6 @@ import Text.Megaparsec qualified as P
 import Text.Megaparsec.Char qualified as P
 import TextShow hiding (singleton)
 
-
--- * Glue
-
-data SolverResult :: Type where
-    SR :: TextShow a => a -> SolverResult
-
--- | Convert a SolverResult to a Text.
-showtSR :: SolverResult -> Text
-showtSR (SR t) = showt t
 
 -- * Parsing and plumbing
 
@@ -181,9 +176,13 @@ both f = bimap f f
 
 -- * Misc
 
+-- | Identity function.
+identity :: a -> a
+identity x = x
+
 -- | Apply a function N times.
 applyN :: Int -> (a -> a) -> a -> a
-applyN n f = List.foldl' (.) id (replicate n f)
+applyN n f = List.foldl' (.) identity (replicate n f)
 
 -- | n - 1
 decr :: Integral a => a -> a

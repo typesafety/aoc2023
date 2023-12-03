@@ -34,7 +34,7 @@ library
         -- For the Hashable class and instances.
         hashable,
         -- Ergonomic records.
-        lens,
+        optics,
         -- For parsing puzzle input.
         megaparsec,
         -- For Reader/State.
