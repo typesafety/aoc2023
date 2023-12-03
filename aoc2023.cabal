@@ -27,12 +27,15 @@ library
         MyPrelude
         Solutions.Day01
         Solutions.Day02
+        Solutions.Day03
     build-depends:
         base ^>= 4.18.1.0,
         -- Standard data structures.
         containers,
         -- For the Hashable class and instances.
         hashable,
+        -- One-dimensional arrays.
+        javelin,
         -- Ergonomic records.
         optics,
         -- For parsing puzzle input.

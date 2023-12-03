@@ -71,9 +71,9 @@ import Control.Monad ((>=>), (<=<), when, forM_, forM,void, replicateM_)
 import Control.Monad.Reader (Reader, ReaderT)
 import Control.Monad.State.Strict (State, StateT)
 import Data.Bifunctor
-import Data.Char (digitToInt)
+import Data.Char (digitToInt, isDigit)
 import Data.Coerce (coerce)
-import Data.Foldable (foldl')
+import Data.Foldable (foldl', find)
 import Data.Functor ((<&>), ($>), (<$))
 import Data.HashMap.Strict (HashMap)
 import Data.HashSet (HashSet)
@@ -96,7 +96,7 @@ import Debug.Trace (
     traceShowId,
     traceShowM,
  )
-import GHC.Generics
+import GHC.Generics (Generic)
 import GHC.Stack (HasCallStack)
 import System.IO.Unsafe (unsafePerformIO)
 import Unsafe.Coerce (unsafeCoerce)

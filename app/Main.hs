@@ -23,6 +23,7 @@ import System.FilePath ((</>))
 
 import Solutions.Day01 qualified as S01
 import Solutions.Day02 qualified as S02
+import Solutions.Day03 qualified as S03
 
 
 main :: IO ()
@@ -56,8 +57,8 @@ pickSolver d p = case (d, p) of
     (D01, P2) -> S01.solve2
     (D02, P1) -> S02.solve1
     (D02, P2) -> S02.solve2
-    -- (D03, P1) -> S03.solve1
-    -- (D03, P2) -> S03.solve2
+    (D03, P1) -> S03.solve1
+    (D03, P2) -> S03.solve2
     -- (D04, P1) -> S04.solve1
     -- (D04, P2) -> S04.solve2
     -- (D05, P1) -> S05.solve1
