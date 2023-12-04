@@ -68,7 +68,16 @@ import Prelude as PreludeLess hiding (
  )
 
 import Control.Applicative ((<|>), empty)
-import Control.Monad ((>=>), (<=<), when, forM_, forM,void, replicateM_)
+import Control.Monad (
+    (<=<),
+    (>=>),
+    foldM,
+    forM,
+    forM_,
+    replicateM_,
+    void,
+    when,
+    )
 import Control.Monad.Reader (Reader, ReaderT)
 import Control.Monad.State.Strict (State, StateT)
 import Data.Bifunctor
