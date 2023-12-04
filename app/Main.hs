@@ -1,8 +1,15 @@
+{-# language LambdaCase #-}
+{-# language NoImplicitPrelude #-}
+{-# language OverloadedLists #-}
+{-# language OverloadedStrings #-}
+{-# language PackageImports #-}
+
 module Main where
 
 import MyPrelude
 
-import Options.Applicative (
+import "filepath" System.FilePath ((</>))
+import "optparse-applicative" Options.Applicative (
     (<**>),
     Parser,
     ParserInfo,
@@ -19,7 +26,6 @@ import Options.Applicative (
     progDesc,
     strOption,
     )
-import System.FilePath ((</>))
 
 import Solutions.Day01 qualified as S01
 import Solutions.Day02 qualified as S02

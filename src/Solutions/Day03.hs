@@ -1,26 +1,31 @@
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE NoFieldSelectors #-}
-{-# LANGUAGE OverloadedLabels #-}
+{-# language DeriveGeneric #-}
+{-# language DuplicateRecordFields #-}
+{-# language LambdaCase #-}
+{-# language NoFieldSelectors #-}
+{-# language NoImplicitPrelude #-}
+{-# language OverloadedLabels #-}
+{-# language OverloadedLists #-}
+{-# language OverloadedStrings #-}
+{-# language PackageImports #-}
 
 module Solutions.Day03 where
 
 import MyPrelude
 
-import Data.Maybe (mapMaybe)
-import Data.List qualified as List
+import "base" Data.Maybe (mapMaybe)
+import "base" Data.List qualified as List
 
-import Data.HashMap.Strict qualified as HM
-import Optics (
+import "megaparsec" Text.Megaparsec qualified as P
+import "megaparsec" Text.Megaparsec.Char qualified as P
+import "megaparsec" Text.Megaparsec.Char.Lexer qualified as Lex
+import "optics" Optics (
     (%),
     (^.),
     over,
     Field1(_1),
     Field2(_2)
     )
-import Text.Megaparsec qualified as P
-import Text.Megaparsec.Char qualified as P
-import Text.Megaparsec.Char.Lexer qualified as Lex
+import "unordered-containers" Data.HashMap.Strict qualified as HM
 
 -- * Part 1
 

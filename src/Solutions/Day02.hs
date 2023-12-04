@@ -1,22 +1,27 @@
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE NoFieldSelectors #-}
-{-# LANGUAGE OverloadedLabels #-}
+{-# language DeriveGeneric #-}
+{-# language DuplicateRecordFields #-}
+{-# language LambdaCase #-}
+{-# language NoFieldSelectors #-}
+{-# language NoImplicitPrelude #-}
+{-# language OverloadedLabels #-}
+{-# language OverloadedLists #-}
+{-# language OverloadedStrings #-}
+{-# language PackageImports #-}
 
 module Solutions.Day02 where
 
 import MyPrelude
 
-import Data.List qualified as List
+import "base" Data.List qualified as List
 
-import Optics (
+import "megaparsec" Text.Megaparsec qualified as P
+import "megaparsec" Text.Megaparsec.Char qualified as P
+import "megaparsec" Text.Megaparsec.Char.Lexer qualified as Lex
+import "optics" Optics (
     view,
     (^.),
     over,
     )
-import Text.Megaparsec qualified as P
-import Text.Megaparsec.Char qualified as P
-import Text.Megaparsec.Char.Lexer qualified as Lex
 
 -- * Part 1
 

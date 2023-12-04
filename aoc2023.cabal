@@ -12,16 +12,8 @@ common warnings
     ghc-options:
         -Wall
 
-common extensions
-    default-extensions:
-        LambdaCase
-        NoImplicitPrelude
-        OverloadedLists
-        OverloadedStrings
-
 library
     import:
-        extensions,
         warnings,
     exposed-modules:
         MyPrelude
@@ -57,7 +49,6 @@ library
 
 executable aoc2023
     import:
-        extensions,
         warnings,
     main-is: Main.hs
     build-depends:

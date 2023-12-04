@@ -1,3 +1,8 @@
+{-# language LambdaCase #-}
+{-# language NoImplicitPrelude #-}
+{-# language OverloadedStrings #-}
+{-# language PackageImports #-}
+
 {- | Alternative prelude.
 
 Add imports here for things used often.
@@ -32,9 +37,10 @@ module MyPrelude (
     module TextShow,
 ) where
 
-import Prelude as PreludeLess hiding (
+import "base" Prelude as PreludeLess hiding (
     -- Hide functions on lists by default in favor of NonEmpty variants.  Use
     -- List.<function> to use list variants.
+    (!!),
     break,
     cycle,
     drop,
@@ -60,15 +66,14 @@ import Prelude as PreludeLess hiding (
     unzip,
     zip,
     zipWith,
-    (!!),
 
     -- Hide `id` since it's a useful variable name (redefined as `identity` in
     -- this module).
     id,
  )
 
-import Control.Applicative ((<|>), empty)
-import Control.Monad (
+import "base" Control.Applicative ((<|>), empty)
+import "base" Control.Monad (
     (<=<),
     (>=>),
     foldM,
@@ -78,27 +83,17 @@ import Control.Monad (
     void,
     when,
     )
-import Control.Monad.Reader (Reader, ReaderT)
-import Control.Monad.State.Strict (State, StateT)
-import Data.Bifunctor
-import Data.Char (digitToInt, isDigit)
-import Data.Coerce (coerce)
-import Data.Foldable (foldl', find)
-import Data.Functor ((<&>), ($>), (<$))
-import Data.HashMap.Strict (HashMap)
-import Data.HashSet (HashSet)
-import Data.IntMap.Strict (IntMap)
-import Data.IntSet (IntSet)
-import Data.Kind (Type)
-import Data.List qualified as List
-import Data.List.NonEmpty hiding ((<|))
-import Data.Maybe (fromMaybe, isJust)
-import Data.Sequence (Seq(..), (<|), (|>))
-import Data.Text (Text)
-import Data.Text qualified as Text
-import Data.Text.IO qualified as Text
-import Data.Void (Void)
-import Debug.Trace (
+import "base" Data.Bifunctor
+import "base" Data.Char (digitToInt, isDigit)
+import "base" Data.Coerce (coerce)
+import "base" Data.Foldable (foldl', find)
+import "base" Data.Functor ((<&>), ($>), (<$))
+import "base" Data.Kind (Type)
+import "base" Data.List qualified as List
+import "base" Data.List.NonEmpty hiding ((<|))
+import "base" Data.Maybe (fromMaybe, isJust)
+import "base" Data.Void (Void)
+import "base" Debug.Trace (
     trace,
     traceIO,
     traceId,
@@ -106,13 +101,20 @@ import Debug.Trace (
     traceShow,
     traceShowId,
     traceShowM,
- )
-import GHC.Generics (Generic)
-import GHC.Stack (HasCallStack)
-import System.IO.Unsafe (unsafePerformIO)
-import Unsafe.Coerce (unsafeCoerce)
+    )
+import "base" GHC.Generics (Generic)
+import "base" GHC.Stack (HasCallStack)
+import "base" System.IO.Unsafe (unsafePerformIO)
+import "base" Unsafe.Coerce (unsafeCoerce)
 
-import Debug.Pretty.Simple (
+import "containers" Data.IntMap.Strict (IntMap)
+import "containers" Data.IntSet (IntSet)
+import "containers" Data.Sequence (Seq(..), (<|), (|>))
+import "megaparsec" Text.Megaparsec qualified as P
+import "megaparsec" Text.Megaparsec.Char qualified as P
+import "mtl" Control.Monad.Reader (Reader, ReaderT)
+import "mtl" Control.Monad.State.Strict (State, StateT)
+import "pretty-simple" Debug.Pretty.Simple (
     pTrace,
     pTraceIO,
     pTraceId,
@@ -120,11 +122,13 @@ import Debug.Pretty.Simple (
     pTraceShow,
     pTraceShowId,
     pTraceShowM,
- )
-import Text.Megaparsec qualified as P
-import Text.Megaparsec.Char qualified as P
-import TextShow hiding (singleton)
-
+    )
+import "text" Data.Text (Text)
+import "text" Data.Text qualified as Text
+import "text" Data.Text.IO qualified as Text
+import "text-show" TextShow hiding (singleton)
+import "unordered-containers" Data.HashMap.Strict (HashMap)
+import "unordered-containers" Data.HashSet (HashSet)
 
 -- * Parsing and plumbing
 

@@ -1,19 +1,24 @@
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE NoFieldSelectors #-}
-{-# LANGUAGE OverloadedLabels #-}
+{-# language DeriveGeneric #-}
+{-# language DuplicateRecordFields #-}
+{-# language LambdaCase #-}
+{-# language NoFieldSelectors #-}
+{-# language NoImplicitPrelude #-}
+{-# language OverloadedLabels #-}
+{-# language OverloadedLists #-}
+{-# language OverloadedStrings #-}
+{-# language PackageImports #-}
 
 module Solutions.Day04 where
 
 import MyPrelude
 
-import Control.Monad.Reader qualified as Reader
-import Data.IntMap.Strict qualified as IM
-import Data.IntSet qualified as IS
-import Optics ((^.))
-import Text.Megaparsec qualified as P
-import Text.Megaparsec.Char qualified as P
-import Text.Megaparsec.Char.Lexer qualified as Lex
+import "containers" Data.IntMap.Strict qualified as IM
+import "containers" Data.IntSet qualified as IS
+import "megaparsec" Text.Megaparsec qualified as P
+import "megaparsec" Text.Megaparsec.Char qualified as P
+import "megaparsec" Text.Megaparsec.Char.Lexer qualified as Lex
+import "mtl" Control.Monad.Reader qualified as Reader
+import "optics" Optics ((^.))
 
 -- * Part 1
 

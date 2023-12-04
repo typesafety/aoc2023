@@ -1,15 +1,20 @@
+{-# language LambdaCase #-}
+{-# language NoImplicitPrelude #-}
+{-# language OverloadedLists #-}
+{-# language OverloadedStrings #-}
+{-# language PackageImports #-}
+
 module Solutions.Day01 where
 
 import MyPrelude
 
-import Control.Arrow ((&&&))
-import Data.Char (isDigit)
-import Data.List qualified as List
-import Text.Read (readMaybe)
+import "base" Control.Arrow ((&&&))
+import "base" Data.List qualified as List
+import "base" Text.Read (readMaybe)
 
-import Text.Megaparsec qualified as P
-import Text.Megaparsec.Char qualified as P
-import Text.Megaparsec.Char.Lexer qualified as Lex
+import "megaparsec" Text.Megaparsec qualified as P
+import "megaparsec" Text.Megaparsec.Char qualified as P
+import "megaparsec" Text.Megaparsec.Char.Lexer qualified as Lex
 
 -- | Solve part 1.
 solve1 :: Text -> Text
