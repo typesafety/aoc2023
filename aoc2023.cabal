@@ -28,6 +28,7 @@ library
         Solutions.Day01
         Solutions.Day02
         Solutions.Day03
+        Solutions.Day04
     build-depends:
         base ^>= 4.18.1.0,
         -- Standard data structures.

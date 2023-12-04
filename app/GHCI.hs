@@ -9,3 +9,4 @@ import MyPrelude
 import Solutions.Day01 qualified as S01
 import Solutions.Day02 qualified as S02
 import Solutions.Day03 qualified as S03
+import Solutions.Day04 qualified as S04

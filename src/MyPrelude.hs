@@ -18,6 +18,7 @@ module MyPrelude (
     module Data.HashMap.Strict,
     module Data.HashSet,
     module Data.IntMap.Strict,
+    module Data.IntSet,
     module Data.Kind,
     module Data.List.NonEmpty,
     module Data.Maybe,
@@ -78,6 +79,7 @@ import Data.Functor ((<&>), ($>), (<$))
 import Data.HashMap.Strict (HashMap)
 import Data.HashSet (HashSet)
 import Data.IntMap.Strict (IntMap)
+import Data.IntSet (IntSet)
 import Data.Kind (Type)
 import Data.List qualified as List
 import Data.List.NonEmpty hiding ((<|))

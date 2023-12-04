@@ -8,6 +8,7 @@ Solutions are located in
 * [Day 1](https://github.com/typesafety/aoc2023/tree/main/src/Solutions/Day01.hs)
 * [Day 2](https://github.com/typesafety/aoc2023/tree/main/src/Solutions/Day02.hs)
 * [Day 3](https://github.com/typesafety/aoc2023/tree/main/src/Solutions/Day03.hs)
+* [Day 4](https://github.com/typesafety/aoc2023/tree/main/src/Solutions/Day04.hs)
 
 ## Usage
 
