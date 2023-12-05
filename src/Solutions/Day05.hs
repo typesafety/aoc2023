@@ -1,10 +1,8 @@
 {-# language DeriveGeneric #-}
 {-# language DuplicateRecordFields #-}
-{-# language LambdaCase #-}
 {-# language NoFieldSelectors #-}
 {-# language NoImplicitPrelude #-}
 {-# language OverloadedLabels #-}
-{-# language OverloadedLists #-}
 {-# language OverloadedStrings #-}
 {-# language PackageImports #-}
 
@@ -12,14 +10,45 @@ module Solutions.Day05 where
 
 import MyPrelude
 
+import "base" Data.Foldable (asum)
+
 import "megaparsec" Text.Megaparsec qualified as P
 import "megaparsec" Text.Megaparsec.Char qualified as P
 import "megaparsec" Text.Megaparsec.Char.Lexer qualified as Lex
+import "optics" Optics hiding (mapping)
 
 -- * Part 1
 
 solve1 :: Text -> Text
-solve1 = todo
+solve1 = showt . minimum . seedLocations . partialParse inputP
+
+seedLocations :: Almanac -> [Int]
+seedLocations almanac = fmap (mapsFunc (almanac ^. #maps)) (almanac ^. #seeds)
+
+-- | Compose the 'mapFunc' functions for a given list of 'Map's, such that the
+-- first Map in the list will run first, and the last Map will run last.
+mapsFunc :: [Map] -> Int -> Int
+mapsFunc = foldl' (\accFunc m -> mapFunc m . accFunc) identity
+
+-- | Given a 'Map', return a function that transform an input ID according to
+-- the mapping rules.  For example, the function given by a "water-to-light"
+-- Map, applied to some ID, would return the associated ID to input into the
+-- "light-to-temperature" Map.
+mapFunc :: Map -> Int -> Int
+mapFunc m n = fromMaybe n . asum . fmap (($ n) . mappingFunc) $ (m  ^. #mappings)
+
+-- | Given a 'Mapping', return a function that calculates the new ID for a given
+-- input, or 'Nothing' if the input is not in range for the mapping.
+mappingFunc :: Mapping -> Int -> Maybe Int
+mappingFunc mapping id
+    | inRange id mapping = Just (id + (mapping ^. #destinationStart - mapping ^. #sourceStart))
+    | otherwise = Nothing
+  where
+    inRange :: Int -> Mapping -> Bool
+    inRange n m =
+        let rangeMin = m ^. #sourceStart
+            rangeMax = (m ^. #sourceStart) + (m ^. #length) - 1
+        in n >= rangeMin && n <= rangeMax
 
 data Almanac = Almanac {
     seeds :: [Int],
@@ -45,8 +74,8 @@ data Cat
     deriving (Eq, Show)
 
 data Mapping = Mapping {
-    source :: Int,
-    destination :: Int,
+    destinationStart :: Int,
+    sourceStart :: Int,
     length :: Int
     }
     deriving (Eq, Show, Generic)
@@ -80,14 +109,13 @@ mapP = do
 
 mappingP :: Parser Mapping
 mappingP = do
-    sourceStart <- Lex.decimal
-    _ <- P.hspace1
     destStart <- Lex.decimal
+    _ <- P.hspace1
+    sourceStart <- Lex.decimal
     _ <- P.hspace1
     len <- Lex.decimal
 
-    pure (Mapping sourceStart destStart len)
-
+    pure (Mapping destStart sourceStart len)
 
 catP :: Parser Cat
 catP = "seed" $> Seed
