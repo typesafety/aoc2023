@@ -3,6 +3,7 @@
 {-# language NoFieldSelectors #-}
 {-# language NoImplicitPrelude #-}
 {-# language OverloadedLabels #-}
+{-# language OverloadedLists #-}
 {-# language OverloadedStrings #-}
 {-# language PackageImports #-}
 
@@ -129,5 +130,41 @@ catP = "seed" $> Seed
 
 -- * Part 2
 
+-- TODO: Implement a smart solution (this brute-force solution took like
+-- 12 minutes to run)
 solve2 :: Text -> Text
-solve2 = todo
+solve2 = showt . minimum . seedLocations2 . partialParse input2P
+
+seedLocations2 :: Almanac2 -> [Int]
+seedLocations2 almanac = fmap locationsForRange (almanac ^. #seedRanges)
+  where
+    locationsForRange :: (Int, Int) -> Int
+    locationsForRange (start, end) = minimum $ fmap @[] (mapsFunc (almanac ^. #maps)) [start .. end]
+
+data Almanac2 = Almanac2 {
+    -- | [(Start, End)]
+    seedRanges :: [(Int, Int)],
+    maps :: [Map]
+    }
+    deriving (Eq, Show, Generic)
+
+-- ** Parsing
+
+input2P :: Parser Almanac2
+input2P = do
+    seeds <- seeds2P
+    _ <- P.eol
+    maps <- P.sepBy mapP P.eol <* P.eof
+    pure (Almanac2 seeds maps)
+
+seeds2P :: Parser [(Int, Int)]
+seeds2P = do
+    ranges <- P.string "seeds:" *> P.hspace *> P.sepBy seed2P P.hspace <* P.eol
+    pure $ fmap (\(start, len) -> (start, start + len - 1)) ranges
+
+seed2P :: Parser (Int, Int)
+seed2P = do
+    start <- Lex.decimal
+    _ <- P.hspace1
+    len <- Lex.decimal
+    pure (start, len)
