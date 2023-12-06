@@ -52,7 +52,7 @@ data Race = Race {
     }
     deriving (Eq, Show, Generic)
 
--- ** Parser
+-- ** Parsing
 
 type Parser = P.Parsec Void Text
 
@@ -65,4 +65,13 @@ inputP = do
 -- * Part 2
 
 solve2 :: Text -> Text
-solve2 = todo
+solve2 = showt . List.length . winningHoldTimes . partialParse inputP2
+
+-- ** Parsing
+
+inputP2 :: Parser Race
+inputP2 = Race <$> digitsP "Time:" <*> digitsP "Distance:"
+  where
+    digitsP :: Text -> Parser Int
+    digitsP leftText = partialParseString Lex.decimal . concat
+        <$> (P.string leftText *> P.hspace *> P.sepBy (P.some P.digitChar) P.hspace1 <* P.eol)
