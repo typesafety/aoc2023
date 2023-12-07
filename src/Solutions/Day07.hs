@@ -1,4 +1,3 @@
-
 {-# language DeriveGeneric #-}
 {-# language DuplicateRecordFields #-}
 {-# language LambdaCase #-}
@@ -20,7 +19,7 @@ import "base" Text.Read (readMaybe)
 import "megaparsec" Text.Megaparsec qualified as P
 import "megaparsec" Text.Megaparsec.Char qualified as P
 import "megaparsec" Text.Megaparsec.Char.Lexer qualified as Lex
-import "optics" Optics ((^.))
+import "optics" Optics ((^.), view)
 
 -- * Part 1
 
@@ -28,7 +27,7 @@ solve1 :: Text -> Text
 solve1 = showt
     . sum
     . List.zipWith (\ix camelHand -> ix * (camelHand ^. #bid)) [1 ..]
-    . List.sortOn (^. #hand)
+    . List.sortOn (Hand . view #cards)
     . partialParse inputP
 
 handType :: [Int] -> HandType
@@ -64,7 +63,7 @@ data HandType
     -- NOTE: Deriving Ord makes the order in which the HandType constructors are
     -- declared in matter ("lowest" is declared first).
 
-newtype Hand = Hand { getHand :: [Int] }
+newtype Hand = Hand { cards :: [Int] }
     deriving (Eq, Show, Generic)
 
 instance Ord Hand where
@@ -74,10 +73,11 @@ instance Ord Hand where
         ordering -> ordering
       where
         secondaryCompare :: [Int] -> [Int] -> Ordering
-        secondaryCompare xs ys = fromMaybe EQ . find (/= EQ) $ List.zipWith compare xs ys
+        secondaryCompare xs ys =
+            fromMaybe EQ . find (/= EQ) $ List.zipWith compare xs ys
 
 data CamelHand = CamelHand {
-    hand :: Hand,
+    cards :: [Int],
     bid :: Int
     }
     deriving (Eq, Show, Generic)
@@ -93,9 +93,9 @@ handP :: Parser CamelHand
 handP = do
     cards <- fmap (fmap cardValue) (P.count 5 (P.upperChar <|> P.digitChar))
     _ <- P.hspace1
-    bet <- Lex.decimal
+    bid <- Lex.decimal
     _ <- P.eol
-    pure $ CamelHand (Hand cards) bet
+    pure $ CamelHand cards bid
   where
     cardValue :: Char -> Int
     cardValue = \case
@@ -109,4 +109,36 @@ handP = do
 -- * Part 2
 
 solve2 :: Text -> Text
-solve2 = todo
+solve2 = showt
+    . sum
+    . List.zipWith (\ix camelHand -> ix * (camelHand ^. #bid)) [1 ..]
+    . List.sortOn (JokerRules . view #cards)
+    . partialParse inputP
+
+applyStrongJoker :: [Int] -> [Int]
+applyStrongJoker cards = case List.filter (/= 11) cards of
+    [] -> cards
+    xs ->
+        let target = partialLast . concat . List.sortOn List.length . List.group . List.sort $ xs
+        in fmap (\n -> if n == 11 then target else n) cards
+
+applyWeakJoker :: [Int] -> [Int]
+applyWeakJoker = fmap (\n -> if n == 11 then 1 else n)
+
+newtype JokerRules = JokerRules { cards :: [Int] }
+    deriving (Eq, Show, Generic)
+
+instance Ord JokerRules where
+    compare :: JokerRules -> JokerRules -> Ordering
+    compare (JokerRules h1) (JokerRules h2) =
+        case (uncurry compare . both (handType . applyStrongJoker)) (h1, h2) of
+            EQ -> secondaryCompare h1 h2
+            ordering -> ordering
+      where
+        secondaryCompare :: [Int] -> [Int] -> Ordering
+        secondaryCompare xs ys =
+            fromMaybe EQ
+            . find (/= EQ)
+            . uncurry (List.zipWith compare)
+            . both applyWeakJoker
+            $ (xs, ys)
