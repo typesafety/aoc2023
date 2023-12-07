@@ -7,3 +7,5 @@ inputs/*
 
 # Session ID for using the puzzle input downloader script.
 .session
+
+__pycache__/
