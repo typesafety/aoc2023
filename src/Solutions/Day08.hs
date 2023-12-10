@@ -15,7 +15,7 @@ import "base" Data.List qualified as List
 
 import "megaparsec" Text.Megaparsec qualified as P
 import "megaparsec" Text.Megaparsec.Char qualified as P
-import "optics" Optics
+import "optics" Optics ((^.))
 import "unordered-containers" Data.HashMap.Strict qualified as HM
 
 -- * Part 1
@@ -23,19 +23,24 @@ import "unordered-containers" Data.HashMap.Strict qualified as HM
 solve1 :: Text -> Text
 solve1 = showt
     . List.length
-    . (\(instrs, nodes) -> path (nodeMap nodes) (List.cycle instrs))
+    . (\(instrs, nodes) -> path (== "ZZZ") "AAA" (nodeMap nodes) (List.cycle instrs))
     . partialParse inputP
 
-path :: NodeMap -> [Instruction] -> [String]
-path = go "AAA"
+path ::
+    (String -> Bool) ->  -- ^ Stopping condition.
+    String ->  -- ^ Starting node.
+    NodeMap ->
+    [Instruction] ->
+    [String]
+path = go
   where
-    go :: String -> NodeMap -> [Instruction] -> [String]
-    go current m instrs = case current of 
-        "ZZZ" -> []
-        _ -> case instrs of
+    go :: (String -> Bool) -> String -> NodeMap -> [Instruction] -> [String]
+    go stopCondition current m instrs = if stopCondition current
+        then []
+        else case instrs of
             (i : is) ->
                 let next = step m current i
-                in next : go next m is
+                in next : go stopCondition next m is
             [] -> []
 
 step :: NodeMap -> String -> Instruction -> String
@@ -85,8 +90,25 @@ nodeP = do
     nodeNameP :: Parser String
     nodeNameP = P.count 3 P.alphaNumChar
 
-
 -- * Part 2
 
 solve2 :: Text -> Text
-solve2 = todo
+solve2 = showt
+    . lcms
+    . fmap List.length
+    . (\(instrs, nodes) ->
+        fmap
+            (\start ->
+                path
+                    (\s -> partialLast s == 'Z')
+                    (start ^. #name)
+                    (nodeMap nodes)
+                    (List.cycle instrs))
+            (aNodes nodes))
+    . partialParse inputP
+
+aNodes :: [Node] -> [Node]
+aNodes = List.filter (\n -> partialLast (n ^. #name) == 'A')
+
+lcms :: [Int] -> Int
+lcms = foldl' lcm 1
