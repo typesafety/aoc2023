@@ -101,6 +101,7 @@ import "base" Debug.Trace (
     traceShow,
     traceShowId,
     traceShowM,
+    traceShowWith,
     )
 import "base" GHC.Generics (Generic)
 import "base" GHC.Stack (HasCallStack)
@@ -122,6 +123,7 @@ import "pretty-simple" Debug.Pretty.Simple (
     pTraceShow,
     pTraceShowId,
     pTraceShowM,
+    pTraceShowWith,
     )
 import "text" Data.Text (Text)
 import "text" Data.Text qualified as Text
