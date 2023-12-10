@@ -14,6 +14,7 @@ Solutions are located in
 * [Day 7](https://github.com/typesafety/aoc2023/tree/main/src/Solutions/Day07.hs)
 * [Day 8](https://github.com/typesafety/aoc2023/tree/main/src/Solutions/Day08.hs)
 * [Day 9](https://github.com/typesafety/aoc2023/tree/main/src/Solutions/Day09.hs)
+* [Day 10](https://github.com/typesafety/aoc2023/tree/main/src/Solutions/Day10.hs)
 
 ## Usage
 
