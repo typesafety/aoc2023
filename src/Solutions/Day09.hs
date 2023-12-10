@@ -22,14 +22,14 @@ solve1 = showt . sum . fmap extrapolate . partialParse inputP
 
 -- | Return the next number in the sequence.
 extrapolate :: [Int] -> Int
-extrapolate ns = if all (== 0) ns
-    then 0
-    else partialLast ns + extrapolate (deltas ns)
-  where
-    deltas :: [Int] -> [Int]
-    deltas = \case
-        (x : y : xs) -> List.zipWith (-) (y : xs) (x : y : xs)
-        _ -> error "Cannot calculate on lists of length < 2."
+extrapolate ns
+    | all (== 0) ns = 0
+    | otherwise = partialLast ns + extrapolate (deltas ns)
+
+deltas :: [Int] -> [Int]
+deltas = \case
+    (x : y : xs) -> List.zipWith (-) (y : xs) (x : y : xs)
+    _ -> error "Cannot calculate on lists of length < 2."
 
 -- ** Parsing
 
@@ -44,4 +44,9 @@ historyP = P.sepBy (Lex.decimal <|> Lex.signed P.space Lex.decimal) P.hspace1 <*
 -- * Part 2
 
 solve2 :: Text -> Text
-solve2 = todo
+solve2 = showt . sum . fmap extrapolate2 . partialParse inputP
+
+extrapolate2 :: [Int] -> Int
+extrapolate2 ns
+    | all (== 0) ns = 0
+    | otherwise = partialHead ns - extrapolate2 (deltas ns)
