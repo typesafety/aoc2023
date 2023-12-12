@@ -72,4 +72,42 @@ inputP = P.someTill lineP P.eof
 -- * Part 2
 
 solve2 :: Text -> Text
-solve2 = todo
+solve2 = showt
+    . (\spaces ->
+        let xNones = noneXs spaces
+            yNones = noneYs spaces
+        in foldl' (\acc (p1, p2) -> acc + manhattan2 p1 p2 xNones yNones) 0
+            . galaxyPairs
+            . toSpaceMap
+            $ spaces
+        )
+    . partialParse inputP
+
+manhattan2 :: Point -> Point -> [Int] -> [Int] -> Int
+manhattan2 p1@(x1, y1) p2@(x2, y2) xNones yNones =
+    abs (x1 - x2) + abs (y1 - y2) + (999999 * crossings xNones yNones p1 p2)
+
+-- | Return the number of crossings
+crossings :: [Int] -> [Int] -> Point -> Point -> Int
+crossings xNones yNones (x1, y1) (x2, y2) =
+    let xs = List.filter (\xNone -> xNone > lowerX && xNone < higherX) xNones
+        ys = List.filter (\yNone -> yNone > lowerY && yNone < higherY) yNones
+    in List.length xs + List.length ys
+  where
+    higherX, higherY, lowerX, lowerY :: Int
+    higherX = max x1 x2
+    higherY = max y1 y2
+    lowerX = min x1 x2
+    lowerY = min y1 y2
+
+noneXs :: [[Space]] -> [Int]
+noneXs = noneYs . List.transpose
+
+noneYs :: [[Space]] -> [Int]
+noneYs = go 0
+  where
+    go :: Int -> [[Space]] -> [Int]
+    go _ [] = []
+    go n (row : rest)
+        | all (== None) row = n : go (n + 1) rest
+        | otherwise = go (n + 1) rest
