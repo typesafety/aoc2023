@@ -75,10 +75,14 @@ data RockMap = RockMap {
     }
     deriving (Eq, Show, Generic)
 
+instance Hashable RockMap
+
 type Point = (Int, Int)
 
 data Rock = Round | Cube
-    deriving (Eq, Ord, Show)
+    deriving (Eq, Ord, Show, Generic)
+
+instance Hashable Rock
 
 -- ** Parsing
 
@@ -96,4 +100,53 @@ pointP = P.char '.' $> Nothing <|> P.char 'O' $> Just Round <|> P.char '#' $> Ju
 -- * Part 2
 
 solve2 :: Text -> Text
-solve2 = todo
+solve2 = showt . totalLoad . tiltCycleN 1_000_000_000 . toRockMap . partialParse inputP
+
+tiltCycleN :: Int -> RockMap -> RockMap
+tiltCycleN target rockMap =
+    let (diff, n, rm) = findCycle HM.empty 0 rockMap
+        remainingCycles = (target - n) `mod` diff
+    in applyN remainingCycles tiltCycle rm
+  where
+    findCycle :: HashMap RockMap (Int, RockMap) -> Int -> RockMap -> (Int, Int, RockMap)
+    findCycle memo ix rm = case memo HM.!? rm of
+        Just (k, _) -> (ix - k, ix, rm)
+        Nothing ->
+            let res = tiltCycle rm
+            in findCycle (HM.insert rm (ix, res) memo) (ix + 1) res
+
+tiltCycle :: RockMap -> RockMap
+tiltCycle = tiltEast . tiltSouth . tiltWest . tiltNorth
+
+tiltSouth :: RockMap -> RockMap
+tiltSouth rockMap = foldl' tiltColumnSouth rockMap [0 .. rockMap ^. #width - 1]
+  where
+    tiltColumnSouth :: RockMap -> Int -> RockMap
+    tiltColumnSouth rocks column =
+        fst $
+            foldl'
+                (\(rm, ps) y -> move ps rm (column, y))
+                (rocks, Empty)
+                [(rocks ^. #height) - 1, (rocks ^. #height) - 2 .. 0]
+
+tiltEast :: RockMap -> RockMap
+tiltEast rockMap = foldl' tiltColumnEast rockMap [0 .. rockMap ^. #height - 1]
+  where
+    tiltColumnEast :: RockMap -> Int -> RockMap
+    tiltColumnEast rocks row =
+        fst $
+            foldl'
+                (\(rm, ps) x -> move ps rm (x, row))
+                (rocks, Empty)
+                [rocks ^. #width - 1, rocks ^. #width - 2 .. 0]
+
+tiltWest :: RockMap -> RockMap
+tiltWest rockMap = foldl' tiltColumnWest rockMap [0 .. rockMap ^. #height - 1]
+  where
+    tiltColumnWest :: RockMap -> Int -> RockMap
+    tiltColumnWest rocks row =
+        fst $
+            foldl'
+                (\(rm, ps) x -> move ps rm (x, row))
+                (rocks, Empty)
+                [0, 1 .. rocks ^. #width - 1]
