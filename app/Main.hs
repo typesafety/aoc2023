@@ -39,6 +39,7 @@ import Solutions.Day09 qualified as S09
 import Solutions.Day10 qualified as S10
 import Solutions.Day11 qualified as S11
 import Solutions.Day12 qualified as S12
+import Solutions.Day13 qualified as S13
 
 main :: IO ()
 main = do
@@ -91,8 +92,8 @@ pickSolver d p = case (d, p) of
     (D11, P2) -> S11.solve2
     (D12, P1) -> S12.solve1
     (D12, P2) -> S12.solve2
-    -- (D13, P1) -> S13.solve1
-    -- (D13, P2) -> S13.solve2
+    (D13, P1) -> S13.solve1
+    (D13, P2) -> S13.solve2
     -- (D14, P1) -> S14.solve1
     -- (D14, P2) -> S14.solve2
     -- (D15, P1) -> S15.solve1

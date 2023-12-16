@@ -86,11 +86,39 @@ import "base" Control.Monad (
 import "base" Data.Bifunctor
 import "base" Data.Char (digitToInt, isDigit)
 import "base" Data.Coerce (coerce)
-import "base" Data.Foldable (foldl', find)
+import "base" Data.Foldable (foldl', find, length)
 import "base" Data.Functor ((<&>), ($>), (<$))
 import "base" Data.Kind (Type)
 import "base" Data.List qualified as List
-import "base" Data.List.NonEmpty hiding ((<|))
+import "base" Data.List.NonEmpty (
+    (!!),
+    NonEmpty,
+    break,
+    cycle,
+    drop,
+    dropWhile,
+    filter,
+    head,
+    init,
+    iterate,
+    last,
+    map,
+    nonEmpty,
+    repeat,
+    reverse,
+    scanl,
+    scanl1,
+    scanr,
+    scanr1,
+    span,
+    splitAt,
+    tail,
+    take,
+    takeWhile,
+    unzip,
+    zip,
+    zipWith,
+    )
 import "base" Data.Maybe (fromMaybe, isJust)
 import "base" Data.Void (Void)
 import "base" Debug.Trace (

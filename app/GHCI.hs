@@ -21,3 +21,4 @@ import Solutions.Day09 qualified as S09
 import Solutions.Day10 qualified as S10
 import Solutions.Day11 qualified as S11
 import Solutions.Day12 qualified as S12
+import Solutions.Day13 qualified as S13
