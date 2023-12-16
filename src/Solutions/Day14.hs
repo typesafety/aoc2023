@@ -1,4 +1,5 @@
 {-# language DuplicateRecordFields #-}
+{-# language LambdaCase #-}
 {-# language NoFieldSelectors #-}
 {-# language NoImplicitPrelude #-}
 {-# language OverloadedLabels #-}
@@ -35,14 +36,14 @@ totalLoad rockMap =
 
 tiltNorth :: RockMap -> RockMap
 tiltNorth rockMap = foldl' tiltColumnNorth rockMap [0 .. rockMap ^. #width - 1]
-
-tiltColumnNorth :: RockMap -> Int -> RockMap
-tiltColumnNorth rockMap column =
-    fst $
-        foldl'
-            (\(rm, ps) y -> move ps rm (column, y))
-            (rockMap, Empty)
-            [0 .. (rockMap ^. #height) - 1]
+  where
+    tiltColumnNorth :: RockMap -> Int -> RockMap
+    tiltColumnNorth rm column =
+        fst $
+            foldl'
+                (\(accRocks, ps) y -> move ps accRocks (column, y))
+                (rm, Empty)
+                [0 .. (rm ^. #height) - 1]
 
 move :: Seq Point -> RockMap -> Point -> (RockMap, Seq Point)
 move vacantPoints rm point = case (rm ^. #rocks) HM.! point of
@@ -90,12 +91,12 @@ type Parser = P.Parsec Void Text
 
 inputP :: Parser [[Maybe Rock]]
 inputP = P.someTill rowP P.eof
+  where
+    rowP :: Parser [Maybe Rock]
+    rowP = P.someTill pointP P.eol
 
-rowP :: Parser [Maybe Rock]
-rowP = P.someTill pointP P.eol
-
-pointP :: Parser (Maybe Rock)
-pointP = P.char '.' $> Nothing <|> P.char 'O' $> Just Round <|> P.char '#' $> Just Cube
+    pointP :: Parser (Maybe Rock)
+    pointP = P.char '.' $> Nothing <|> P.char 'O' $> Just Round <|> P.char '#' $> Just Cube
 
 -- * Part 2
 
@@ -116,37 +117,43 @@ tiltCycleN target rockMap =
             in findCycle (HM.insert rm (ix, res) memo) (ix + 1) res
 
 tiltCycle :: RockMap -> RockMap
-tiltCycle = tiltEast . tiltSouth . tiltWest . tiltNorth
+tiltCycle = tilt East . tilt South . tilt West . tilt North
 
-tiltSouth :: RockMap -> RockMap
-tiltSouth rockMap = foldl' tiltColumnSouth rockMap [0 .. rockMap ^. #width - 1]
-  where
-    tiltColumnSouth :: RockMap -> Int -> RockMap
-    tiltColumnSouth rocks column =
-        fst $
-            foldl'
-                (\(rm, ps) y -> move ps rm (column, y))
-                (rocks, Empty)
-                [(rocks ^. #height) - 1, (rocks ^. #height) - 2 .. 0]
+data Direction
+    = North
+    | West
+    | South
+    | East
 
-tiltEast :: RockMap -> RockMap
-tiltEast rockMap = foldl' tiltColumnEast rockMap [0 .. rockMap ^. #height - 1]
+tilt :: Direction -> RockMap -> RockMap
+tilt dir rockMap = foldl' (tiltLine dir) rockMap (ixes dir)
   where
-    tiltColumnEast :: RockMap -> Int -> RockMap
-    tiltColumnEast rocks row =
-        fst $
-            foldl'
-                (\(rm, ps) x -> move ps rm (x, row))
-                (rocks, Empty)
-                [rocks ^. #width - 1, rocks ^. #width - 2 .. 0]
+    ixes :: Direction -> [Int]
+    ixes = \case
+        North -> [0 .. rockMap ^. #width - 1]
+        West -> [0 .. rockMap ^. #height - 1]
+        South -> [0 .. rockMap ^. #width - 1]
+        East -> [0 .. rockMap ^. #height - 1]
 
-tiltWest :: RockMap -> RockMap
-tiltWest rockMap = foldl' tiltColumnWest rockMap [0 .. rockMap ^. #height - 1]
-  where
-    tiltColumnWest :: RockMap -> Int -> RockMap
-    tiltColumnWest rocks row =
-        fst $
+    tiltLine :: Direction -> RockMap -> Int -> RockMap
+    tiltLine d rm pinnedIx = fst $ case d of
+        North ->
             foldl'
-                (\(rm, ps) x -> move ps rm (x, row))
-                (rocks, Empty)
-                [0, 1 .. rocks ^. #width - 1]
+                (\(accRockMap, accVacantPoints) y -> move accVacantPoints accRockMap (pinnedIx, y))
+                (rm, Empty)
+                [0 .. (rm ^. #height) - 1]
+        West ->
+            foldl'
+                (\(accRockMap, accVacantPoints) x -> move accVacantPoints accRockMap (x, pinnedIx))
+                (rm, Empty)
+                [0, 1 .. rm ^. #width - 1]
+        East ->
+            foldl'
+                (\(accRockMap, accVacantPoints) x -> move accVacantPoints accRockMap (x, pinnedIx))
+                (rm, Empty)
+                [rm ^. #width - 1, rm ^. #width - 2 .. 0]
+        South ->
+            foldl'
+                (\(accRockMap, accVacantPoints) y -> move accVacantPoints accRockMap (pinnedIx, y))
+                (rm, Empty)
+                [(rm ^. #height) - 1, (rm ^. #height) - 2 .. 0]
