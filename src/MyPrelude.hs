@@ -33,6 +33,7 @@ module MyPrelude (
     module Debug.Pretty.Simple,
     module Debug.Trace,
     module GHC.Generics,
+    module GHC.Stack,
     module System.IO.Unsafe,
     module TextShow,
 ) where

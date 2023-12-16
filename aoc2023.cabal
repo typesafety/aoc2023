@@ -30,6 +30,7 @@ library
         Solutions.Day11
         Solutions.Day12
         Solutions.Day13
+        Solutions.Day14
     build-depends:
         base ^>= 4.18.1.0,
 
