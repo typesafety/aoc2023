@@ -1,6 +1,5 @@
 {-# language LambdaCase #-}
 {-# language NoImplicitPrelude #-}
-{-# language OverloadedLists #-}
 {-# language OverloadedStrings #-}
 {-# language PackageImports #-}
 
@@ -42,6 +41,7 @@ import Solutions.Day12 qualified as S12
 import Solutions.Day13 qualified as S13
 import Solutions.Day14 qualified as S14
 import Solutions.Day15 qualified as S15
+import Solutions.Day16 qualified as S16
 
 main :: IO ()
 main = do
@@ -100,8 +100,8 @@ pickSolver d p = case (d, p) of
     (D14, P2) -> S14.solve2
     (D15, P1) -> S15.solve1
     (D15, P2) -> S15.solve2
-    -- (D16, P1) -> S16.solve1
-    -- (D16, P2) -> S16.solve2
+    (D16, P1) -> S16.solve1
+    (D16, P2) -> S16.solve2
     -- (D17, P1) -> S17.solve1
     -- (D17, P2) -> S17.solve2
     -- (D18, P1) -> S18.solve1

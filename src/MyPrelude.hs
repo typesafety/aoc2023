@@ -159,6 +159,7 @@ import "text" Data.Text qualified as Text
 import "text" Data.Text.IO qualified as Text
 import "text-show" TextShow hiding (singleton)
 import "unordered-containers" Data.HashMap.Strict (HashMap)
+import "unordered-containers" Data.HashMap.Strict qualified as HM
 import "unordered-containers" Data.HashSet (HashSet)
 
 -- * Parsing and plumbing
@@ -238,6 +239,25 @@ decr n = n - 1
 
 (<.>) :: Functor f => (b -> c) -> (a -> f b) -> a -> f c
 f <.> g = fmap f . g
+
+-- * Visualization
+
+visualizeGrid :: forall a . Show a => HashMap (Int, Int) a -> String
+visualizeGrid =
+    draw
+    . fmap (first (\(y, x) -> (x, y)))
+    . List.sortOn fst
+    . fmap (first (\(x, y) -> (y, x)))
+    . HM.toList
+  where
+    draw :: [((Int, Int), a)] -> String
+    draw = go 0
+      where
+        go :: Int -> [((Int, Int), a)] -> String
+        go _ [] = ""
+        go lastY (((_x, y), v) : rest)
+            | lastY /= y = "\n" <> show v <> go y rest
+            | otherwise = show v <> go y rest
 
 -- * Placeholders
 

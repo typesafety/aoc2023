@@ -32,27 +32,37 @@ library
         Solutions.Day13
         Solutions.Day14
         Solutions.Day15
+        Solutions.Day16
     build-depends:
         base ^>= 4.18.1.0,
 
         -- Standard data structures.
         containers,
+
         -- For the Hashable class and instances.
         hashable,
+
         -- One-dimensional arrays.
         javelin,
+
         -- Ergonomic records.
         optics,
+
         -- For parsing puzzle input.
         megaparsec,
+
         -- For Reader/State.
         mtl,
+
         -- For easy prettyprinting.
         pretty-simple,
+
         -- To avoid String.
         text,
+
         -- Show instances and functions for Text.
         text-show,
+
         -- Hashmaps are not part of containers.
         unordered-containers,
     hs-source-dirs:
