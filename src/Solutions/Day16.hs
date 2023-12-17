@@ -9,6 +9,7 @@ module Solutions.Day16 where
 import MyPrelude
 
 import "base" Data.List qualified as List
+import "base" Data.Ord (Down(Down))
 
 import "hashable" Data.Hashable (Hashable)
 import "megaparsec" Text.Megaparsec qualified as P
@@ -130,4 +131,27 @@ tileP = P.char '.' $> None
 -- * Part 2
 
 solve2 :: Text -> Text
-solve2 = todo
+solve2 =
+    showt
+    . List.maximum
+    . (\grid ->
+        fmap
+            (\dp -> HM.size . HM.filter (> 0) $ runWalk dp grid)
+            (starts grid)
+        )
+    . toGrid
+    . partialParse inputP
+
+starts :: Grid -> [(Direction, Point)]
+starts grid =
+    let points = HM.keys grid
+        minX = fst . partialHead . List.sortOn fst $ points
+        minY = snd . partialHead . List.sortOn snd $ points
+        maxX = fst . partialHead . List.sortOn (Down . fst) $ points
+        maxY = snd . partialHead . List.sortOn (Down . snd) $ points
+    in mconcat [
+        fmap ((D, ) . (, minY)) [minX .. maxX],
+        fmap ((U, ) . (, maxY)) [minX .. maxX],
+        fmap ((R, ) . (minX, )) [minY .. maxY],
+        fmap ((L, ) . (maxX, )) [minY .. maxY]
+        ]
